@@ -3,7 +3,7 @@ export class Etapa {
   nome: string;
   duracao:number;
   timeEspera:number;
-  qtdessoas:number;
+  qtdpessoas:number;
 
   constructor(id:number = null, nome: string = "", duracao:number = null, espera:number = null, qtd:number = null) {
     this.setNome(nome)
@@ -47,11 +47,11 @@ export class Etapa {
   }
 
   setQtdPessoas(qtd) {
-    this.qtdessoas = qtd;
+    this.qtdpessoas = qtd;
   }
 
   getQtdPessoas(){
-    return this.qtdessoas;
+    return this.qtdpessoas;
   }
 
 }
