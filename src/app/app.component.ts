@@ -16,53 +16,67 @@ export class AppComponent implements OnInit {
   formEtapa
 
 
-  constructor(private formBuilder: FormBuilder){
+  constructor(private formBuilder: FormBuilder) {
 
     this.formEtapa = this.formBuilder.group({
       nome: [null, [Validators.required]],
       espera: [null, [Validators.required]],
       qtdpessoas: [null, [Validators.required]],
-      id:[null],
-      duracao:[null, [Validators.required]]
+      id: [null],
+      duracao: [null, [Validators.required]]
     });
   }
 
   ngOnInit() {
-    this.toggleModal(false)
+    this.toggleModal(false);
+    this.listEtapa = JSON.parse(localStorage.getItem('list'))
+    console.log(this.listEtapa)
+
   }
 
 
   criarEditar(etapa) {
     this.toggleModal(true)
     this.etapaSelected = etapa
-    if(this.etapaSelected){
+    if (this.etapaSelected) {
       this.formEtapa.patchValue({
-        nome:this.etapaSelected.nome,
-        espera:this.etapaSelected.timeEspera,
-        qtdpessoas:this.etapaSelected.qtdpessoas,
-        id:this.etapaSelected.id,
-        duracao:this.etapaSelected.duracao
+        nome: this.etapaSelected.nome,
+        espera: this.etapaSelected.espera,
+        qtdpessoas: this.etapaSelected.qtdpessoas,
+        id: this.etapaSelected.id,
+        duracao: this.etapaSelected.duracao
       })
     }
-    else{
+    else {
       this.formEtapa.reset()
     }
   }
 
-  salvar(){
-
-    try{
-      if(this.formEtapa.status == 'INVALID')
+  salvar() {
+    try {
+      if (this.formEtapa.status == 'INVALID')
         throw "Preencha todas informações do formulário"
 
       let model = Object.assign(this.formEtapa.value)
-
-      this.listEtapa.push(new Etapa(this.listEtapa.length+1, model.nome, model.duracao, model.espera, model.qtdpessoas))
+      if (!model.id) {
+        this.listEtapa.push(new Etapa(this.listEtapa.length + 1, model.nome, model.duracao, model.espera, model.qtdpessoas))
+      }
+      else {
+        let eta = this.listEtapa.find(e => e.id == model.id)
+        let index = this.listEtapa.indexOf(eta);
+        this.listEtapa[index] =  model
+      }
+      console.log(this.listEtapa)
+      localStorage.removeItem("list");
+      localStorage.setItem("list", JSON.stringify(this.listEtapa));
 
       this.toggleModal(false)
       this.formEtapa.reset()
 
-    }catch(e){
+      ///////TODO EDITAR E SALVAR NOS STORAGE
+
+
+    } catch (e) {
       alert(e)
     }
 
