@@ -29,7 +29,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.toggleModal(false);
+    // localStorage.clear();
     this.listEtapa = JSON.parse(localStorage.getItem('list'))
+    if(this.listEtapa == null)
+    this.listEtapa = []
     console.log(this.listEtapa)
 
   }
